@@ -70,8 +70,6 @@ composer install
 copy .env.example .env
 php artisan key:generate
 php artisan migrate
-npm install
-npm run build
 ```
 
 ## Lancement en développement
@@ -84,7 +82,6 @@ Ou séparément :
 
 ```bash
 php artisan serve
-npm run dev
 ```
 
 L'application est ensuite accessible à l'adresse
