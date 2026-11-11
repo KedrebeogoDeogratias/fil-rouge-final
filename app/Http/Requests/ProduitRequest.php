@@ -14,12 +14,12 @@ class ProduitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'designation_p' => ['required', 'string', 'max:255'],
-            'type_p'        => ['required', 'string', 'max:255'],
-            'prix_ht'       => ['required', 'numeric', 'min:0'],
-            'promotion_p'   => ['nullable', 'integer', 'min:0', 'max:100'],
-            'stock_p'       => ['required', 'integer', 'min:0'],
-            'image_p'       => ['nullable', 'string'],
+            'designationP' => ['required', 'string', 'max:255'],
+            'typeP'        => ['required', 'string', 'max:255'],
+            'prixHt'       => ['required', 'numeric', 'min:0'],
+            'promotionP'   => ['nullable', 'integer', 'min:0', 'max:100'],
+            'stockP'       => ['required', 'integer', 'min:0'],
+            'imageP'       => ['nullable', 'string'],
         ];
     }
 }
