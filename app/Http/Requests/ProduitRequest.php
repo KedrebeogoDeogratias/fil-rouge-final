@@ -13,12 +13,14 @@ class ProduitRequest extends FormRequest
 
     public function rules(): array
     {
+        $required = $this->isMethod('POST') ? 'required' : 'sometimes';
+
         return [
-            'designationP' => ['required', 'string', 'max:255'],
-            'typeP'        => ['required', 'string', 'max:255'],
-            'prixHt'       => ['required', 'numeric', 'min:0'],
+            'designationP' => [$required, 'string', 'max:255'],
+            'categorie'    => [$required, 'string'],
+            'prixHt'       => [$required, 'numeric', 'min:0'],
             'promotionP'   => ['nullable', 'integer', 'min:0', 'max:100'],
-            'stockP'       => ['required', 'integer', 'min:0'],
+            'stockP'       => [$required, 'integer', 'min:0'],
             'imageP'       => ['nullable', 'string'],
         ];
     }
