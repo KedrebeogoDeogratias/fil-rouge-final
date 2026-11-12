@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Categorie;
 use App\Models\Produit;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -18,10 +19,28 @@ class ProduitSeeder extends Seeder
             JSON_THROW_ON_ERROR
         );
 
+        $maintenant = now();
+
+        $categories = collect($donnees)
+            ->pluck('type_p')
+            ->filter()
+            ->unique()
+            ->values()
+            ->map(fn (string $designation) => [
+                'designation_c' => $designation,
+                'created_at'    => $maintenant,
+                'updated_at'    => $maintenant,
+            ])
+            ->all();
+
+        Categorie::upsert($categories, ['designation_c'], ['updated_at']);
+
+        $categorieIds = Categorie::pluck('id', 'designation_c');
+
         $lignes = array_map(fn (array $p) => [
             'id'            => (int) $p['id_p'],
             'designation_p' => $p['designation_p'],
-            'type_p'        => $p['type_p'],
+            'categorie_id'  => $categorieIds[$p['type_p']] ?? null,
             'prix_ht'       => $p['prix_ht'],
             'promotion_p'   => $p['promotion_p'] ?? 0,
             'stock_p'       => $p['stock_p'] ?? 0,
@@ -34,7 +53,7 @@ class ProduitSeeder extends Seeder
         Produit::upsert(
             $lignes,
             ['id'],
-            ['designation_p', 'type_p', 'prix_ht', 'promotion_p', 'stock_p', 'image_p', 'created_at', 'updated_at']
+            ['designation_p', 'categorie_id', 'prix_ht', 'promotion_p', 'stock_p', 'image_p', 'created_at', 'updated_at']
         );
     }
 }

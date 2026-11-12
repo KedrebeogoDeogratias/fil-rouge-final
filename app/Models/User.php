@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use ApiPlatform\Metadata\{ApiResource, Get, GetCollection};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,11 +10,10 @@ use Laravel\Sanctum\HasApiTokens;
 
 #[ApiResource(
     operations: [
-        new GetCollection(middleware: 'auth:sanctum'),
-        new Get(middleware: 'auth:sanctum'),
+        new GetCollection(middleware: ['auth:sanctum', 'admin']),
+        new Get(uriTemplate: '/users/{id}', middleware: ['auth:sanctum', 'admin']),
     ]
 )]
-
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -31,6 +28,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -54,5 +52,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 }
